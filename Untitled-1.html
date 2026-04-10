@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人信息卡片</title>
+    <style>
+        /* 全局样式重置与基础设置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+            transition: all 0.3s ease; /* 全局过渡动画 */
+        }
+
+        /* 浅色主题（默认） */
+        :root {
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --input-bg: #f9f9f9;
+            --btn-bg: #409eff;
+            --btn-hover: #2b88e8;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 深色主题 */
+        .dark-theme {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --input-bg: #3d3d3d;
+            --btn-bg: #64b5f6;
+            --btn-hover: #42a5f5;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        /* 页面标题 */
+        .page-title {
+            font-size: 28px;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            background-color: var(--btn-bg);
+            color: white;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--btn-hover);
+            transform: scale(1.05);
+        }
+
+        /* 卡片容器 */
+        .card-container {
+            width: 100%;
+            max-width: 450px;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 35px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: slideUp 0.8s ease;
+        }
+
+        /* 头像区域 */
+        .avatar-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--btn-bg);
+            cursor: pointer;
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+
+        #avatar-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        /* 可编辑内容区域 */
+        .edit-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .edit-label {
+            font-size: 14px;
+            color: var(--text-color);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .edit-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            outline: none;
+        }
+
+        .edit-input:focus {
+            border-color: var(--btn-bg);
+            box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+        }
+
+        textarea.edit-input {
+            resize: none;
+            min-height: 100px;
+        }
+
+        /* 保存按钮 */
+        .save-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--btn-bg);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .save-btn:hover {
+            background-color: var(--btn-hover);
+            transform: translateY(-2px);
+        }
+
+        .save-btn:active {
+            transform: translateY(0);
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- 页面标题 -->
+<h1 class="page-title">个人信息卡片</h1>
+
+<!-- 主题切换按钮（创新功能） -->
+<button class="theme-toggle" id="themeBtn">切换深色/浅色主题</button>
+
+<!-- 卡片容器 -->
+<div class="card-container">
+    <!-- 头像区域 -->
+    <div class="avatar-wrapper">
+        <img src="https://picsum.photos/200/200" alt="个人头像" class="avatar" id="avatarImg">
+        <input type="file" id="avatar-input" accept="image/*">
+    </div>
+
+    <!-- 姓名编辑区域 -->
+    <div class="edit-group">
+        <label class="edit-label">姓名</label>
+        <input type="text" class="edit-input" id="nameInput" placeholder="请输入你的姓名" value="杨轩宇">
+    </div>
+
+    <!-- 个人简介编辑区域 -->
+    <div class="edit-group">
+        <label class="edit-label">个人简介</label>
+        <textarea class="edit-input" id="introInput" placeholder="请输入你的个人简介">热爱前端开发，专注于页面交互与用户体验优化</textarea>
+    </div>
+
+    <!-- 保存按钮 -->
+    <button class="save-btn" id="saveBtn">保存信息</button>
+</div>
+
+<script>
+    // 获取DOM元素
+    const avatarImg = document.getElementById('avatarImg');
+    const avatarInput = document.getElementById('avatar-input');
+    const nameInput = document.getElementById('nameInput');
+    const introInput = document.getElementById('introInput');
+    const saveBtn = document.getElementById('saveBtn');
+    const themeBtn = document.getElementById('themeBtn');
+    const body = document.body;
+
+    // 1. 头像上传与实时预览功能
+    avatarInput.addEventListener('change', function(e) {
+        // 获取用户选择的文件
+        const file = e.target.files[0];
+        if (file) {
+            // 创建文件读取对象
+            const reader = new FileReader();
+            // 读取完成后更新头像
+            reader.onload = function(event) {
+                avatarImg.src = event.target.result;
+            };
+            // 读取图片文件
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // 2. 保存信息功能
+    saveBtn.addEventListener('click', function() {
+        // 获取输入框内容
+        const name = nameInput.value.trim();
+        const intro = introInput.value.trim();
+
+        // 简单校验
+        if (!name) {
+            alert('请输入姓名！');
+            nameInput.focus();
+            return;
+        }
+
+        // 保存成功提示
+        alert('信息保存成功！');
+    });
+
+    // 3. 主题切换功能（创新加分）
+    themeBtn.addEventListener('click', function() {
+        body.classList.toggle('dark-theme');
+        // 切换按钮文字
+        if (body.classList.contains('dark-theme')) {
+            themeBtn.textContent = '切换浅色主题';
+        } else {
+            themeBtn.textContent = '切换深色主题';
+        }
+    });
+
+    // 4. 回车快捷保存（优化体验）
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            saveBtn.click();
+        }
+    });
+</script>
+</body>
+</html>
